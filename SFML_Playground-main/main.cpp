@@ -29,6 +29,7 @@ public:
 	sf::RectangleShape playerShape;
 
 	float velocityX = 0, velocityY = 0, gravity = 0.3;
+	bool onIce = false;
 
 	static const int numRows = 20;
 	static const int numCols = 45;
@@ -37,23 +38,23 @@ public:
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0},
-	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0},
+	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,5,0,0,0,0,0,0,0,0,1,0,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,1,0,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,1,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0},
-	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,1,0,0,1,0,0,1,0,0},
+	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
 	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1,1,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	 {0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,1,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,1,0,0,1,1,0,0},
-	 {0,0,0,0,0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,1,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0},
-	 {0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	 {0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	 {0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	 {0,0,0,0,0,1,2,2,2,2,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
-	 {1,1,1,1,1,1,2,1,1,1,1,2,2,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}
+	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,4,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	 {0,0,0,0,0,0,0,0,0,0,2,0,0,0,0,0,0,0,0,0,0,1,0,0,0,1,1,1,0,0,0,0,0,0,0,0,1,0,1,0,0,1,1,0,3},
+	 {0,0,0,0,0,0,0,0,0,0,2,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0},
+	 {0,0,0,0,0,0,0,1,1,1,1,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	 {0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,1,1,0,1,0,1,0,1,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+ 	 {0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	 {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+	 {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2,2}
 	};
 
 	sf::RectangleShape level[numRows][numCols];
@@ -94,6 +95,38 @@ public:
 
 					level[row][col].setFillColor(sf::Color::Blue);
 				}
+
+				if (levelData[row][col] == 3)
+				{
+					level[row][col].setSize(sf::Vector2f(70, 30));
+					level[row][col].setPosition(sf::Vector2f(col * 70, row * 30));
+
+					level[row][col].setFillColor(sf::Color::Green);
+				}
+
+				if (levelData[row][col] == 4)
+				{
+					level[row][col].setSize(sf::Vector2f(70, 30));
+					level[row][col].setPosition(sf::Vector2f(col * 70, row * 30));
+
+					level[row][col].setFillColor(sf::Color::Yellow);
+				}
+
+				if (levelData[row][col] == 5)
+				{
+					level[row][col].setSize(sf::Vector2f(70, 30));
+					level[row][col].setPosition(sf::Vector2f(col * 70, row * 30));
+
+					level[row][col].setFillColor(sf::Color::Cyan);
+				}
+
+				if (levelData[row][col] == 6)
+				{
+					level[row][col].setSize(sf::Vector2f(70, 30));
+					level[row][col].setPosition(sf::Vector2f(col * 70, row * 30));
+
+					level[row][col].setFillColor(sf::Color(255, 140, 0));
+				}
 			}
 			std::cout << std::endl;
 		}
@@ -131,15 +164,21 @@ public:
 				{
 					for (int col = 0; col < numCols; col++)
 					{
-
 						level[row][col].move(sf::Vector2f(-3.7, 0));
 					}
-
 				}
 
 				if (sf::Keyboard::isKeyPressed(sf::Keyboard::Scan::Space) && velocityY == 0)
 				{
-					velocityY = -11.8;
+					if (onIce)
+					{
+						velocityY = -7.0f;
+						onIce = false;
+					}
+					else
+					{
+						velocityY = -11.8f;
+					}
 				}
 				velocityY = velocityY + gravity;
 				playerShape.move(sf::Vector2f(0, velocityY));
@@ -188,6 +227,50 @@ public:
 							if (playerShape.getGlobalBounds().findIntersection(level[row][col].getGlobalBounds()))
 							{
 								init();
+							}
+						}
+
+						if (levelData[row][col] == 3)
+						{
+							if (playerShape.getGlobalBounds().findIntersection(level[row][col].getGlobalBounds()))
+							{
+								window.close();
+							}
+						}
+
+						if (levelData[row][col] == 4)
+						{
+							if (playerShape.getGlobalBounds().findIntersection(level[row][col].getGlobalBounds()))
+							{
+								if (playerShape.getPosition().y < level[row][col].getPosition().y)
+								{
+									playerShape.setPosition(sf::Vector2f(playerShape.getPosition().x, level[row][col].getPosition().y));
+									playerShape.move(sf::Vector2f(0, -playerShape.getGlobalBounds().size.y));
+									velocityY = -20.0;
+								}
+								else
+								{
+									init();
+								}
+							}
+						}
+
+						if (levelData[row][col] == 5)
+						{
+							if (playerShape.getGlobalBounds().findIntersection(level[row][col].getGlobalBounds()))
+							{
+								if (playerShape.getPosition().y < level[row][col].getPosition().y)
+								{
+									gravity = 0;
+									velocityY = 0;
+									playerShape.setPosition(sf::Vector2f(playerShape.getPosition().x, level[row][col].getPosition().y));
+									playerShape.move(sf::Vector2f(0, -playerShape.getGlobalBounds().size.y));
+									onIce = true;
+								}
+								else
+								{
+									init();
+								}
 							}
 						}
 					}
