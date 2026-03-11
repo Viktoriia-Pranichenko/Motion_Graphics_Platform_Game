@@ -17,7 +17,76 @@
 
 #include <SFML/Graphics.hpp>
 #include <iostream>
-#include <time.h> 
+#include <time.h>
+
+class Particle
+{
+public:
+	int timetoLive;
+	sf::Vector2f velocity;
+	sf::RectangleShape shape;
+
+	void Draw(sf::RenderWindow& win)
+	{
+		if (timetoLive > 0)
+			win.draw(shape);
+	}
+
+	void Update()
+	{
+		if (timetoLive > 0)
+		{
+			shape.move(velocity);
+			timetoLive--;
+		}
+	}
+
+	Particle() {}
+
+	Particle(sf::Vector2f pos, sf::Vector2f vel, sf::Color color)
+	{
+		shape.setSize(sf::Vector2f(6, 6));
+		shape.setPosition(pos);
+		shape.setFillColor(color);
+		velocity = vel;
+		timetoLive = rand() % 30;
+	}
+};
+
+#define maxParticles 50
+class ParticleSystem
+{
+public:
+	Particle particles[maxParticles];
+	sf::Vector2f position;
+
+	void Initialise(sf::Vector2f pos, sf::Color color)
+	{
+		position = pos;
+		for (int i = 0; i < maxParticles; i++)
+		{
+			particles[i] = Particle(position,
+				sf::Vector2f((float)(rand() / double(RAND_MAX) * 12 - 6),
+					(float)(rand() / double(RAND_MAX) * 12 - 6)),
+				color);
+		}
+	}
+
+	void Update()
+	{
+		for (int i = 0; i < maxParticles; i++)
+			particles[i].Update();
+	}
+	
+	void Draw(sf::RenderWindow& win)
+	{
+		for (int i = 0; i < maxParticles; i++)
+			particles[i].Draw(win);
+	}
+
+	ParticleSystem() {}
+};
+
 class Game
 {
 public:
@@ -30,6 +99,8 @@ public:
 
 	float velocityX = 0, velocityY = 0, gravity = 0.3;
 	bool onIce = false;
+	bool isDying = false;
+	int deathTimer = 0;
 
 	static const int numRows = 20;
 	static const int numCols = 45;
@@ -58,6 +129,8 @@ public:
 	};
 
 	sf::RectangleShape level[numRows][numCols];
+
+	ParticleSystem particles;  
 
 	Game()
 	{
@@ -160,6 +233,17 @@ public:
 
 			if (timeSinceLastUpdate > timePerFrame)
 			{
+				if (isDying)
+				{
+					deathTimer--;
+					if (deathTimer == 0)
+					{
+						isDying = false;
+						init();
+					}
+				}
+				else
+				{
 				for (int row = 0; row < numRows; row++)
 				{
 					for (int col = 0; col < numCols; col++)
@@ -205,7 +289,9 @@ public:
 										break;
 									}
 									else {
-										init();
+										particles.Initialise(playerShape.getPosition(), sf::Color::Red);
+										isDying = true;
+										deathTimer = 10;
 									}
 								}
 							}
@@ -217,7 +303,9 @@ public:
 							{
 								if (playerShape.getGlobalBounds().findIntersection(level[row][col].getGlobalBounds()))
 								{
-									init();
+									particles.Initialise(playerShape.getPosition(), sf::Color::Red);
+									isDying = true;
+									deathTimer = 10;
 								}
 							}
 
@@ -226,7 +314,9 @@ public:
 						{
 							if (playerShape.getGlobalBounds().findIntersection(level[row][col].getGlobalBounds()))
 							{
-								init();
+								particles.Initialise(playerShape.getPosition(), sf::Color::Blue);
+								isDying = true;
+								deathTimer = 10;
 							}
 						}
 
@@ -280,6 +370,7 @@ public:
 				{
 					init();
 				}
+				} 
 
 				window.clear();
 
@@ -292,6 +383,8 @@ public:
 					}
 				}
 				window.draw(playerShape);
+				particles.Update();
+				particles.Draw(window);
 
 				window.display();
 
